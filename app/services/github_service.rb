@@ -3,14 +3,17 @@ class GithubService
   attr_reader :access_token
 
   def initialize(access_hash = nil)
+    # puts "Access token = #{access_hash}"
     @access_token = access_hash["access_token"] if access_hash
   end
 
   def authenticate!(client_id, client_secret, code)
+    # puts "Authentication --> client_id : #{client_id} || client_secret : #{client_secret} || code : #{code}"
     response = Faraday.post "https://github.com/login/oauth/access_token",
         {client_id: client_id, client_secret: client_secret, code: code},
         {'Accept' => 'application/json'}
     access_hash = JSON.parse(response.body)
+    # puts "Access Token = #{access_hash["access_token"]}"
     @access_token = access_hash["access_token"]
   end
 
